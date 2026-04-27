@@ -61,6 +61,15 @@ messages:
   wilderness-scan-finished:
     type: chat
     text: "<prefix><#22c55e>Scan complete: low <#ffffff><low></#ffffff>, medium <#ffffff><medium></#ffffff>, high <#ffffff><high></#ffffff>, build score <#ffffff><build></#ffffff>, assets <#ffffff><assets></#ffffff>.</#22c55e>"
+  wilderness-scan-advice-low:
+    type: chat
+    text: "<prefix><#22c55e>Tip: run <#ffffff>preview</#ffffff>, then <#ffffff>restore chunk</#ffffff> or <#ffffff>restore surface 32</#ffffff>.</#22c55e>"
+  wilderness-scan-advice-medium:
+    type: chat
+    text: "<prefix><#facc15>Tip: yellow areas create a job first; run <#ffffff>confirm</#ffffff> to continue. Containers/redstone are still skipped.</#facc15>"
+  wilderness-scan-advice-high:
+    type: chat
+    text: "<prefix><#ef4444>Tip: red means protected assets or high risk. Use selection/surface for a smaller repair.</#ef4444>"
   wilderness-preview-created:
     type: chat
     text: "<prefix><#38bdf8>Wilderness preview created. Green=restorable, yellow=confirm required, red=protected.</#38bdf8>"
@@ -82,6 +91,21 @@ messages:
   wilderness-restore-failed:
     type: chat
     text: "<prefix><#ef4444>Wilderness restore job <#ffffff><job_id></#ffffff> failed: <#ffffff><reason></#ffffff></#ef4444>"
+  wilderness-restore-advice-medium:
+    type: chat
+    text: "<prefix><#facc15>Next: if this is not a build, run <#ffffff>/lifelink wilderness confirm <job_id></#ffffff>.</#facc15>"
+  wilderness-restore-advice-high:
+    type: chat
+    text: "<prefix><#ef4444>Found containers, beds, redstone, signs, or protection. Preview/protect first, then use selection or surface.</#ef4444>"
+  wilderness-restore-advice-origin:
+    type: chat
+    text: "<prefix><#facc15>Load the matching origin world <#ffffff>world_origin</#ffffff> before restoring.</#facc15>"
+  wilderness-restore-advice-locked:
+    type: chat
+    text: "<prefix><#facc15>This area is locked by another write job. Wait or cancel it first.</#facc15>"
+  wilderness-restore-advice-generic:
+    type: chat
+    text: "<prefix><#a9aeb8>Run <#ffffff>/lifelink wilderness job <job_id></#ffffff> for details.</#a9aeb8>"
   wilderness-rollback-started:
     type: chat
     text: "<prefix><#facc15>Wilderness rollback job <#ffffff><job_id></#ffffff> started.</#facc15>"

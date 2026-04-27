@@ -96,6 +96,18 @@ messages:
     type: chat
     text: "<prefix><#22c55e>扫描完成：低风险 <#ffffff><low></#ffffff>，中风险 <#ffffff><medium></#ffffff>，高风险 <#ffffff><high></#ffffff>，建筑分 <#ffffff><build></#ffffff>，疑似资产 <#ffffff><assets></#ffffff>。</#22c55e>"
 
+  wilderness-scan-advice-low:
+    type: chat
+    text: "<prefix><#22c55e>建议：先 <#ffffff>preview</#ffffff>，没问题再 <#ffffff>restore chunk</#ffffff> 或 <#ffffff>restore surface 32</#ffffff>。</#22c55e>"
+
+  wilderness-scan-advice-medium:
+    type: chat
+    text: "<prefix><#facc15>建议：黄色区域会先创建任务，再用 <#ffffff>confirm</#ffffff> 确认；容器/红石仍会跳过。</#facc15>"
+
+  wilderness-scan-advice-high:
+    type: chat
+    text: "<prefix><#ef4444>建议：红色表示硬资产或保护区，整块不会自动修；改用 selection/surface 小范围处理。</#ef4444>"
+
   wilderness-preview-created:
     type: chat
     text: "<prefix><#38bdf8>已生成荒野修复预览。绿色=可恢复，黄色=需确认，红色=保护区域。</#38bdf8>"
@@ -123,6 +135,26 @@ messages:
   wilderness-restore-failed:
     type: chat
     text: "<prefix><#ef4444>荒野修复任务 <#ffffff><job_id></#ffffff> 失败：<#ffffff><reason></#ffffff></#ef4444>"
+
+  wilderness-restore-advice-medium:
+    type: chat
+    text: "<prefix><#facc15>下一步：确认不是建筑后执行 <#ffffff>/lifelink wilderness confirm <job_id></#ffffff>。</#facc15>"
+
+  wilderness-restore-advice-high:
+    type: chat
+    text: "<prefix><#ef4444>原因：检测到箱子、床、红石、告示牌或保护区。请先 preview/protect，再用 selection 或 surface 小范围修。</#ef4444>"
+
+  wilderness-restore-advice-origin:
+    type: chat
+    text: "<prefix><#facc15>需要先加载同种子母本世界 <#ffffff>world_origin</#ffffff>，否则只能 scan/preview。</#facc15>"
+
+  wilderness-restore-advice-locked:
+    type: chat
+    text: "<prefix><#facc15>该区域已有任务在写入，等它完成或 cancel 后再试。</#facc15>"
+
+  wilderness-restore-advice-generic:
+    type: chat
+    text: "<prefix><#a9aeb8>可用 <#ffffff>/lifelink wilderness job <job_id></#ffffff> 查看任务详情。</#a9aeb8>"
 
   wilderness-rollback-started:
     type: chat

@@ -368,7 +368,7 @@ class WildernessRestoreService(
             }
             val (chunkX, chunkZ) = chunks[index]
             scheduler.runAt(world, chunkX, chunkZ) {
-                if (shouldPauseForNearbyPlayer(world, chunkX, chunkZ)) {
+                if (shouldPauseForNearbyPlayer(world, chunkX, chunkZ, restoring.creatorUuid)) {
                     skipped += byChunk[chunks[index]].orEmpty().size
                     next(index + 1)
                     return@runAt
@@ -438,13 +438,14 @@ class WildernessRestoreService(
         next(0)
     }
 
-    private fun shouldPauseForNearbyPlayer(world: World, chunkX: Int, chunkZ: Int): Boolean {
+    private fun shouldPauseForNearbyPlayer(world: World, chunkX: Int, chunkZ: Int, creatorUuid: UUID?): Boolean {
         val config = configService.current().wilderness.performance
         if (!config.pauseWhenPlayerNearby || config.playerSafeDistance <= 0) return false
         val centerX = (chunkX shl 4) + 8
         val centerZ = (chunkZ shl 4) + 8
         val maxDistanceSquared = config.playerSafeDistance * config.playerSafeDistance
         return world.players.any { player ->
+            if (creatorUuid != null && player.uniqueId == creatorUuid) return@any false
             val dx = player.location.blockX - centerX
             val dz = player.location.blockZ - centerZ
             dx * dx + dz * dz <= maxDistanceSquared

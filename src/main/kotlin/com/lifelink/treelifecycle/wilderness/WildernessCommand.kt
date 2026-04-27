@@ -61,20 +61,7 @@ class WildernessCommand(
         messageService.send(player, "wilderness-scan-start", mapOf("world" to player.world.name, "radius" to radiusText(args)))
         service.scanArea(player.world, box, surfaceOnly) { report ->
             deliver(player) {
-                messageService.send(
-                    player,
-                    "wilderness-scan-finished",
-                    mapOf(
-                        "low" to report.lowChunks.toString(),
-                        "medium" to report.mediumChunks.toString(),
-                        "high" to report.highChunks.toString(),
-                        "damage" to report.damageScore.toString(),
-                        "build" to report.buildScore.toString(),
-                        "assets" to report.assetCount.toString(),
-                        "recoverable" to report.recoverableBlocks.toString(),
-                        "skipped" to report.skippedBlocks.toString()
-                    )
-                )
+                sendScanSummary(player, report)
                 soundByRisk(player, report.highestRisk)
             }
         }
@@ -93,11 +80,7 @@ class WildernessCommand(
             deliver(player) {
                 messageService.send(player, "wilderness-preview-created")
                 messageService.playSound(player, "wilderness-preview")
-                messageService.send(
-                    player,
-                    "wilderness-scan-finished",
-                    mapOf("low" to report.lowChunks.toString(), "medium" to report.mediumChunks.toString(), "high" to report.highChunks.toString())
-                )
+                sendScanSummary(player, report)
             }
         }
     }
@@ -287,6 +270,7 @@ class WildernessCommand(
             "wilderness-confirm-required" -> {
                 messageService.send(player, "wilderness-restore-created", mapOf("job_id" to shortId(job.jobId)))
                 messageService.send(player, key, mapOf("job_id" to shortId(job.jobId)))
+                messageService.send(player, "wilderness-restore-advice-medium", mapOf("job_id" to shortId(job.jobId)))
                 messageService.playSound(player, "warning")
             }
             "wilderness-rollback-completed" -> {
@@ -294,7 +278,11 @@ class WildernessCommand(
                 messageService.playSound(player, "success")
             }
             "wilderness-restore-failed" -> {
-                messageService.send(player, key, mapOf("job_id" to shortId(job.jobId), "reason" to (job.errorMessage ?: "unknown")))
+                val rawReason = job.errorMessage ?: "unknown"
+                messageService.send(player, key, mapOf("job_id" to shortId(job.jobId), "reason" to friendlyReason(rawReason)))
+                failureAdviceKey(rawReason)?.let { adviceKey ->
+                    messageService.send(player, adviceKey, mapOf("job_id" to shortId(job.jobId), "reason" to rawReason))
+                }
                 messageService.playSound(player, "error")
             }
             else -> messageService.send(player, key, mapOf("job_id" to shortId(job.jobId)))
@@ -323,6 +311,49 @@ class WildernessCommand(
             )
         }
         keys.forEach { messageService.send(sender, it) }
+    }
+
+    private fun sendScanSummary(player: Player, report: AreaScanReport) {
+        messageService.send(
+            player,
+            "wilderness-scan-finished",
+            mapOf(
+                "low" to report.lowChunks.toString(),
+                "medium" to report.mediumChunks.toString(),
+                "high" to report.highChunks.toString(),
+                "damage" to report.damageScore.toString(),
+                "build" to report.buildScore.toString(),
+                "assets" to report.assetCount.toString(),
+                "recoverable" to report.recoverableBlocks.toString(),
+                "skipped" to report.skippedBlocks.toString()
+            )
+        )
+        messageService.send(player, scanAdviceKey(report.highestRisk))
+    }
+
+    private fun scanAdviceKey(risk: RiskLevel): String = when (risk) {
+        RiskLevel.LOW -> "wilderness-scan-advice-low"
+        RiskLevel.MEDIUM -> "wilderness-scan-advice-medium"
+        RiskLevel.HIGH -> "wilderness-scan-advice-high"
+    }
+
+    private fun friendlyReason(reason: String): String = when {
+        reason.startsWith("origin-world-missing") -> "缺少 world_origin 母本世界"
+        reason == "high-risk-area-protected" || reason == "high-risk-area-protected-after-rescan" -> "检测到高风险玩家资产或保护区"
+        reason == "area-locked" -> "该区域正在被其他任务处理"
+        reason == "backup-missing" -> "找不到恢复前快照"
+        reason == "world-unavailable" -> "目标世界未加载"
+        reason == "wilderness-disabled" -> "荒野修复未启用"
+        reason == "job-not-found" -> "找不到任务"
+        reason == "server-restarted-before-job-finished" -> "服务器重启前任务未完成"
+        else -> reason
+    }
+
+    private fun failureAdviceKey(reason: String): String? = when {
+        reason.startsWith("origin-world-missing") -> "wilderness-restore-advice-origin"
+        reason == "high-risk-area-protected" || reason == "high-risk-area-protected-after-rescan" -> "wilderness-restore-advice-high"
+        reason == "area-locked" -> "wilderness-restore-advice-locked"
+        else -> "wilderness-restore-advice-generic"
     }
 
     private fun requirePermission(sender: CommandSender, permission: String): Boolean {

@@ -120,6 +120,15 @@ data class ProtectionMask(
     }
 }
 
+data class DetectedAsset(
+    val worldId: UUID,
+    val worldName: String,
+    val x: Int,
+    val y: Int,
+    val z: Int,
+    val assetType: AssetType
+)
+
 data class ChunkRiskReport(
     val worldId: UUID,
     val worldName: String,
@@ -132,7 +141,8 @@ data class ChunkRiskReport(
     val recoverableBlocks: Int,
     val protectedBlocks: Int,
     val skippedBlocks: Int,
-    val reasons: List<String>
+    val reasons: List<String>,
+    val detectedAssets: List<DetectedAsset> = emptyList()
 )
 
 data class AreaScanReport(
