@@ -29,6 +29,7 @@ class LifeLinkCommand(
 ) : CommandExecutor, TabCompleter {
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         when (args.firstOrNull()?.lowercase(Locale.ROOT)) {
+            null, "", "help", "?" -> help(sender)
             "reload" -> reload(sender)
             "recover" -> recover(sender)
             "saplingmode" -> saplingMode(sender, args.getOrNull(1))
@@ -36,7 +37,7 @@ class LifeLinkCommand(
             "status", "stats" -> status(sender)
             "inspect" -> inspect(sender)
             "debug" -> debug(sender, args.getOrNull(1))
-            else -> messageService.send(sender, "command-usage")
+            else -> help(sender)
         }
         return true
     }
@@ -145,6 +146,18 @@ class LifeLinkCommand(
 
     private fun canUseSaplingMode(sender: CommandSender): Boolean =
         sender.hasPermission(Permissions.ADMIN_SAPLING_MODE) || sender.hasPermission(Permissions.ADMIN)
+
+    private fun help(sender: CommandSender) {
+        listOf(
+            "help-title",
+            "help-tree",
+            "help-saplingmode",
+            "help-wilderness",
+            "help-wilderness-flow",
+            "help-admin",
+            "help-next"
+        ).forEach { messageService.send(sender, it) }
+    }
 
     private fun status(sender: CommandSender) {
         if (!sender.hasPermission(Permissions.STATS) && !sender.hasPermission(Permissions.ADMIN)) {

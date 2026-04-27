@@ -40,7 +40,7 @@ messages:
     text: "<prefix><#8BE9FD>Usage: /lifelink saplingmode <#50FA7B>on</#50FA7B>|<#FF5555>off</#FF5555>|<#F1FA8C>status</#F1FA8C></#8BE9FD>"
   command-usage:
     type: chat
-    text: "<prefix><#8BE9FD>Usage: /lifelink <#50FA7B>reload</#50FA7B>, <#50FA7B>recover</#50FA7B>, or <#50FA7B>saplingmode</#50FA7B></#8BE9FD>"
+    text: "<prefix><#38bdf8>Run <#ffffff>/lifelink help</#ffffff> for command help.</#38bdf8>"
 
 
   status-summary:
@@ -54,7 +54,7 @@ messages:
     text: "<prefix><#38bdf8>Debug target <#ffffff><target></#ffffff>, Folia=<#ffffff><folia></#ffffff>.</#38bdf8>"
   wilderness-command-usage:
     type: chat
-    text: "<prefix><#38bdf8>Usage: /lifelink wilderness scan|preview|restore|protect|confirm|rollback|jobs.</#38bdf8>"
+    text: "<prefix><#38bdf8>Run <#ffffff>/lifelink wilderness help</#ffffff> for wilderness restore help.</#38bdf8>"
   wilderness-scan-start:
     type: chat
     text: "<prefix><#38bdf8>Scanning wilderness area in <#ffffff><world></#ffffff>, range <#ffffff><radius></#ffffff>.</#38bdf8>"
@@ -133,6 +133,70 @@ messages:
   wilderness-job-not-confirmable:
     type: chat
     text: "<prefix><#facc15>This job is not waiting for confirmation.</#facc15>"
+
+  help-title:
+    type: chat
+    text: "<prefix><gradient:#22c55e:#38bdf8><bold>LifeLink Help</bold></gradient> <#a9aeb8>Tree lifecycle + conservative wilderness restore</#a9aeb8>"
+  help-tree:
+    type: chat
+    text: "<#22c55e>/lifelink recover</#22c55e> <#a9aeb8>- Recheck unfinished tree replant tasks; does not restore wilderness.</#a9aeb8>"
+  help-saplingmode:
+    type: chat
+    text: "<#22c55e>/lifelink saplingmode on/off/status</#22c55e> <#a9aeb8>- Admin-placed saplings enter managed lifecycle.</#a9aeb8>"
+  help-wilderness:
+    type: chat
+    text: "<#38bdf8>/lifelink wilderness</#38bdf8> <#a9aeb8>- Old-server restore entry: scan first, preview next, restore last.</#a9aeb8>"
+  help-wilderness-flow:
+    type: chat
+    text: "<#facc15>Suggested flow</#facc15><#a9aeb8>: scan risk -> preview area -> protect builds -> restore low-risk terrain.</#a9aeb8>"
+  help-admin:
+    type: chat
+    text: "<#a78bfa>/lifelink reload</#a78bfa> <#a9aeb8>- Reload config and language asynchronously.</#a9aeb8>"
+  help-next:
+    type: chat
+    text: "<#ffffff>More</#ffffff><#a9aeb8>: /lifelink wilderness help, or /lifelink wilderness help restore.</#a9aeb8>"
+  wilderness-help-title:
+    type: chat
+    text: "<prefix><gradient:#22c55e:#38bdf8><bold>Wilderness Help</bold></gradient> <#a9aeb8>Conservative by default; skip uncertain areas.</#a9aeb8>"
+  wilderness-help-purpose:
+    type: chat
+    text: "<#38bdf8>Purpose</#38bdf8><#a9aeb8>: repair craters, scarred surfaces, water/lava pollution, and floating leftovers; not player buildings.</#a9aeb8>"
+  wilderness-help-flow:
+    type: chat
+    text: "<#facc15>Flow</#facc15><#a9aeb8>: scan only checks -> preview particles -> restore low risk -> rollback from snapshot.</#a9aeb8>"
+  wilderness-help-scan:
+    type: chat
+    text: "<#22c55e>scan</#22c55e><#a9aeb8>: checks only. chunk=current chunk, radius=nearby area, selection=pos1/pos2 area.</#a9aeb8>"
+  wilderness-help-preview:
+    type: chat
+    text: "<#38bdf8>preview</#38bdf8><#a9aeb8>: particles only. Green=restorable, yellow=confirm, red=protected/high risk.</#a9aeb8>"
+  wilderness-help-restore:
+    type: chat
+    text: "<#ef4444>restore</#ef4444><#a9aeb8>: copies natural blocks from world_origin. LOW runs, MEDIUM needs confirm, HIGH is denied.</#a9aeb8>"
+  wilderness-help-protect:
+    type: chat
+    text: "<#facc15>protect</#facc15><#a9aeb8>: manually protects player builds. chunk/radius now, pos1/pos2/create for selection.</#a9aeb8>"
+  wilderness-help-selection:
+    type: chat
+    text: "<#a78bfa>Selection</#a78bfa><#a9aeb8>: stand at one corner and run /lifelink wilderness pos1, then another corner and pos2.</#a9aeb8>"
+  wilderness-help-area:
+    type: chat
+    text: "<#38bdf8>Area</#38bdf8><#a9aeb8>: chunk=current chunk; radius [radius]=nearby area; selection=pos1/pos2.</#a9aeb8>"
+  wilderness-help-risk:
+    type: chat
+    text: "<#facc15>Risk</#facc15><#a9aeb8>: chest/bed/redstone/TileState=high; signs/build score/asset index=medium.</#a9aeb8>"
+  wilderness-help-safety:
+    type: chat
+    text: "<#ef4444>Safety</#ef4444><#a9aeb8>: snapshot first; restore skips containers, redstone, TileState, and protection masks again.</#a9aeb8>"
+  wilderness-help-rollback:
+    type: chat
+    text: "<#22c55e>rollback [jobId]</#22c55e><#a9aeb8>: rolls back from snapshot. Use /lifelink wilderness jobs to find jobId.</#a9aeb8>"
+  wilderness-help-jobs:
+    type: chat
+    text: "<#38bdf8>jobs/job</#38bdf8><#a9aeb8>: jobs lists recent jobs; job [id] shows status, restored blocks, and skipped blocks.</#a9aeb8>"
+  wilderness-help-examples:
+    type: chat
+    text: "<#ffffff>Examples</#ffffff><#a9aeb8>: /lifelink wilderness scan chunk; preview radius 32; restore surface 32; protect chunk.</#a9aeb8>"
 tree-types:
   oak: "Oak"
   birch: "Birch"

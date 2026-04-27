@@ -24,7 +24,7 @@ class WildernessCommand(
 
     fun handle(sender: CommandSender, args: List<String>): Boolean {
         when (args.firstOrNull()?.lowercase(Locale.ROOT)) {
-            null, "", "help" -> help(sender)
+            null, "", "help", "?" -> help(sender, args.getOrNull(1))
             "scan" -> scan(sender, args.drop(1))
             "preview" -> preview(sender, args.drop(1))
             "restore" -> restore(sender, args.drop(1))
@@ -33,10 +33,10 @@ class WildernessCommand(
             "rollback" -> rollback(sender, args.getOrNull(1))
             "jobs" -> jobs(sender)
             "job" -> job(sender, args.getOrNull(1))
-            "protect" -> protect(sender, args.drop(1))
+            "protect", "protection" -> protect(sender, args.drop(1))
             "pos1" -> setPos(sender, true)
             "pos2" -> setPos(sender, false)
-            else -> help(sender)
+            else -> help(sender, args.firstOrNull())
         }
         return true
     }
@@ -111,7 +111,7 @@ class WildernessCommand(
             "surface" -> RestoreMode.SURFACE
             "selection" -> RestoreMode.SELECTION
             else -> {
-                messageService.send(player, "wilderness-command-usage")
+                help(player, "restore")
                 return
             }
         }
@@ -215,7 +215,7 @@ class WildernessCommand(
                     messageService.send(player, "wilderness-job-not-found", mapOf("job_id" to args.getOrNull(1).orEmpty()))
                 }
             }
-            else -> messageService.send(player, "wilderness-command-usage")
+            else -> help(player, "protect")
         }
     }
 
@@ -239,7 +239,7 @@ class WildernessCommand(
         "surface" -> radiusBox(player, args.getOrNull(1)?.toIntOrNull()?.coerceIn(1, 512) ?: 32) to true
         "selection" -> selectionBox(player)?.let { it to surface }
         else -> {
-            messageService.send(player, "wilderness-command-usage")
+            help(player, "area")
             null
         }
     }
@@ -301,8 +301,28 @@ class WildernessCommand(
         }
     }
 
-    private fun help(sender: CommandSender) {
-        messageService.send(sender, "wilderness-command-usage")
+    private fun help(sender: CommandSender, topic: String? = null) {
+        val keys = when (topic?.lowercase(Locale.ROOT)) {
+            "scan" -> listOf("wilderness-help-title", "wilderness-help-scan", "wilderness-help-risk", "wilderness-help-examples")
+            "preview" -> listOf("wilderness-help-title", "wilderness-help-preview", "wilderness-help-risk", "wilderness-help-examples")
+            "restore" -> listOf("wilderness-help-title", "wilderness-help-restore", "wilderness-help-safety", "wilderness-help-examples")
+            "protect", "protection" -> listOf("wilderness-help-title", "wilderness-help-protect", "wilderness-help-selection", "wilderness-help-examples")
+            "rollback" -> listOf("wilderness-help-title", "wilderness-help-rollback", "wilderness-help-jobs")
+            "jobs", "job" -> listOf("wilderness-help-title", "wilderness-help-jobs", "wilderness-help-rollback")
+            "area", "selection", "radius", "chunk" -> listOf("wilderness-help-title", "wilderness-help-area", "wilderness-help-selection", "wilderness-help-examples")
+            else -> listOf(
+                "wilderness-help-title",
+                "wilderness-help-purpose",
+                "wilderness-help-flow",
+                "wilderness-help-scan",
+                "wilderness-help-preview",
+                "wilderness-help-restore",
+                "wilderness-help-protect",
+                "wilderness-help-rollback",
+                "wilderness-help-examples"
+            )
+        }
+        keys.forEach { messageService.send(sender, it) }
     }
 
     private fun requirePermission(sender: CommandSender, permission: String): Boolean {

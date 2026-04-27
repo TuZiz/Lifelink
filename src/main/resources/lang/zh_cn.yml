@@ -69,7 +69,7 @@ messages:
 
   command-usage:
     type: chat
-    text: "<prefix><#48CAE4>用法: /lifelink <#4DDB86>reload</#4DDB86>、<#4DDB86>recover</#4DDB86> 或 <#4DDB86>saplingmode</#4DDB86></#48CAE4>"
+    text: "<prefix><#38bdf8>输入 <#ffffff>/lifelink help</#ffffff> 查看命令说明。</#38bdf8>"
 
 
   status-summary:
@@ -86,7 +86,7 @@ messages:
 
   wilderness-command-usage:
     type: chat
-    text: "<prefix><#38bdf8>用法: /lifelink wilderness scan|preview|restore|protect|confirm|rollback|jobs。</#38bdf8>"
+    text: "<prefix><#38bdf8>输入 <#ffffff>/lifelink wilderness help</#ffffff> 查看荒野修复说明。</#38bdf8>"
 
   wilderness-scan-start:
     type: chat
@@ -191,6 +191,70 @@ messages:
   wilderness-job-not-confirmable:
     type: chat
     text: "<prefix><#facc15>该任务当前状态不需要确认或不能确认。</#facc15>"
+
+  help-title:
+    type: chat
+    text: "<prefix><gradient:#22c55e:#38bdf8><bold>LifeLink 帮助</bold></gradient> <#a9aeb8>树木托管 + 保守型荒野修复</#a9aeb8>"
+  help-tree:
+    type: chat
+    text: "<#22c55e>/lifelink recover</#22c55e> <#a9aeb8>- 重扫未完成的树木补种任务，不会乱改荒野。</#a9aeb8>"
+  help-saplingmode:
+    type: chat
+    text: "<#22c55e>/lifelink saplingmode on/off/status</#22c55e> <#a9aeb8>- 管理员放树苗时纳入系统托管。</#a9aeb8>"
+  help-wilderness:
+    type: chat
+    text: "<#38bdf8>/lifelink wilderness</#38bdf8> <#a9aeb8>- 老服荒野修复入口：先扫描，后预览，再恢复。</#a9aeb8>"
+  help-wilderness-flow:
+    type: chat
+    text: "<#facc15>推荐流程</#facc15><#a9aeb8>：scan 检查风险 -> preview 看范围 -> protect 保护建筑 -> restore 修复低风险。</#a9aeb8>"
+  help-admin:
+    type: chat
+    text: "<#a78bfa>/lifelink reload</#a78bfa> <#a9aeb8>- 异步重载配置和语言。</#a9aeb8>"
+  help-next:
+    type: chat
+    text: "<#ffffff>更多说明</#ffffff><#a9aeb8>：/lifelink wilderness help，或 /lifelink wilderness help restore。</#a9aeb8>"
+  wilderness-help-title:
+    type: chat
+    text: "<prefix><gradient:#22c55e:#38bdf8><bold>荒野修复帮助</bold></gradient> <#a9aeb8>默认保守，不确定就跳过。</#a9aeb8>"
+  wilderness-help-purpose:
+    type: chat
+    text: "<#38bdf8>用途</#38bdf8><#a9aeb8>：修爆炸坑、乱挖地表、水/岩浆污染、浮空残留；不用于覆盖玩家建筑。</#a9aeb8>"
+  wilderness-help-flow:
+    type: chat
+    text: "<#facc15>流程</#facc15><#a9aeb8>：scan 只扫描 -> preview 粒子预览 -> restore 低风险恢复 -> rollback 从快照回滚。</#a9aeb8>"
+  wilderness-help-scan:
+    type: chat
+    text: "<#22c55e>scan</#22c55e><#a9aeb8>：只检查不改方块。chunk=当前区块，radius=半径范围，selection=pos1/pos2 选区。</#a9aeb8>"
+  wilderness-help-preview:
+    type: chat
+    text: "<#38bdf8>preview</#38bdf8><#a9aeb8>：只显示粒子，绿色可恢复，黄色需确认，红色保护/高风险。</#a9aeb8>"
+  wilderness-help-restore:
+    type: chat
+    text: "<#ef4444>restore</#ef4444><#a9aeb8>：从 world_origin 复制自然方块。LOW 自动执行，MEDIUM 需要 confirm，HIGH 拒绝。</#a9aeb8>"
+  wilderness-help-protect:
+    type: chat
+    text: "<#facc15>protect</#facc15><#a9aeb8>：手动保护玩家建筑。chunk/radius 立即保护，pos1/pos2/create 创建选区保护。</#a9aeb8>"
+  wilderness-help-selection:
+    type: chat
+    text: "<#a78bfa>选区</#a78bfa><#a9aeb8>：先站到一角 /lifelink wilderness pos1，再站另一角 /lifelink wilderness pos2。</#a9aeb8>"
+  wilderness-help-area:
+    type: chat
+    text: "<#38bdf8>范围</#38bdf8><#a9aeb8>：chunk 当前区块；radius [半径] 周围区域；selection 使用 pos1/pos2。</#a9aeb8>"
+  wilderness-help-risk:
+    type: chat
+    text: "<#facc15>风险</#facc15><#a9aeb8>：箱子/床/红石/TileState=高风险；告示牌/建筑分/资产索引=中风险。</#a9aeb8>"
+  wilderness-help-safety:
+    type: chat
+    text: "<#ef4444>安全</#ef4444><#a9aeb8>：恢复前写快照；执行时再次跳过容器、红石、TileState、保护遮罩。</#a9aeb8>"
+  wilderness-help-rollback:
+    type: chat
+    text: "<#22c55e>rollback [jobId]</#22c55e><#a9aeb8>：按恢复前快照回滚，jobId 可用 /lifelink wilderness jobs 查看。</#a9aeb8>"
+  wilderness-help-jobs:
+    type: chat
+    text: "<#38bdf8>jobs/job</#38bdf8><#a9aeb8>：jobs 列出最近任务；job [id] 查看任务状态、恢复数量和跳过数量。</#a9aeb8>"
+  wilderness-help-examples:
+    type: chat
+    text: "<#ffffff>示例</#ffffff><#a9aeb8>：/lifelink wilderness scan chunk；preview radius 32；restore surface 32；protect chunk。</#a9aeb8>"
 tree-types:
   oak: "橡木"
   birch: "白桦木"

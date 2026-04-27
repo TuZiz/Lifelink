@@ -85,6 +85,8 @@ class LangService(
             mapOf("pale_oak" to "Pale Oak")
         }
 
+    private fun chat(text: String): MessageDefinition = MessageDefinition(MessageTarget.CHAT, text, null, null)
+
     private fun defaultBundle(): LangBundle = LangBundle(
         locale = "en_us",
         prefix = "<#32C5FF>LifeLink</#32C5FF> <#7CFFB2>|</#7CFFB2> ",
@@ -193,10 +195,32 @@ class LangService(
             ),
             "command-usage" to MessageDefinition(
                 MessageTarget.CHAT,
-                "<prefix><#8BE9FD>Usage: /lifelink <#50FA7B>reload</#50FA7B>, <#50FA7B>recover</#50FA7B>, or <#50FA7B>saplingmode</#50FA7B></#8BE9FD>",
+                "<prefix><#38bdf8>输入 <#ffffff>/lifelink help</#ffffff> 查看命令说明。</#38bdf8>",
                 null,
                 null
-            )
+            ),
+            "help-title" to chat("<prefix><gradient:#22c55e:#38bdf8><bold>LifeLink 帮助</bold></gradient> <#a9aeb8>树木托管 + 保守型荒野修复</#a9aeb8>"),
+            "help-tree" to chat("<#22c55e>/lifelink recover</#22c55e> <#a9aeb8>- 重扫未完成的树木补种任务，不会乱改荒野。</#a9aeb8>"),
+            "help-saplingmode" to chat("<#22c55e>/lifelink saplingmode on/off/status</#22c55e> <#a9aeb8>- 管理员放树苗时纳入系统托管。</#a9aeb8>"),
+            "help-wilderness" to chat("<#38bdf8>/lifelink wilderness</#38bdf8> <#a9aeb8>- 老服荒野修复入口：先扫描，后预览，再恢复。</#a9aeb8>"),
+            "help-wilderness-flow" to chat("<#facc15>推荐流程</#facc15><#a9aeb8>：scan 检查风险 -> preview 看范围 -> protect 保护建筑 -> restore 修复低风险。</#a9aeb8>"),
+            "help-admin" to chat("<#a78bfa>/lifelink reload</#a78bfa> <#a9aeb8>- 异步重载配置和语言。</#a9aeb8>"),
+            "help-next" to chat("<#ffffff>更多说明</#ffffff><#a9aeb8>：/lifelink wilderness help，或 /lifelink wilderness help restore。</#a9aeb8>"),
+            "wilderness-command-usage" to chat("<prefix><#38bdf8>输入 <#ffffff>/lifelink wilderness help</#ffffff> 查看荒野修复说明。</#38bdf8>"),
+            "wilderness-help-title" to chat("<prefix><gradient:#22c55e:#38bdf8><bold>荒野修复帮助</bold></gradient> <#a9aeb8>默认保守，不确定就跳过。</#a9aeb8>"),
+            "wilderness-help-purpose" to chat("<#38bdf8>用途</#38bdf8><#a9aeb8>：修爆炸坑、乱挖地表、水/岩浆污染、浮空残留；不用于覆盖玩家建筑。</#a9aeb8>"),
+            "wilderness-help-flow" to chat("<#facc15>流程</#facc15><#a9aeb8>：scan 只扫描 -> preview 粒子预览 -> restore 低风险恢复 -> rollback 从快照回滚。</#a9aeb8>"),
+            "wilderness-help-scan" to chat("<#22c55e>scan</#22c55e><#a9aeb8>：只检查不改方块。chunk=当前区块，radius=半径范围，selection=pos1/pos2 选区。</#a9aeb8>"),
+            "wilderness-help-preview" to chat("<#38bdf8>preview</#38bdf8><#a9aeb8>：只显示粒子，绿色可恢复，黄色需确认，红色保护/高风险。</#a9aeb8>"),
+            "wilderness-help-restore" to chat("<#ef4444>restore</#ef4444><#a9aeb8>：从 world_origin 复制自然方块。LOW 自动执行，MEDIUM 需要 confirm，HIGH 拒绝。</#a9aeb8>"),
+            "wilderness-help-protect" to chat("<#facc15>protect</#facc15><#a9aeb8>：手动保护玩家建筑。chunk/radius 立即保护，pos1/pos2/create 创建选区保护。</#a9aeb8>"),
+            "wilderness-help-selection" to chat("<#a78bfa>选区</#a78bfa><#a9aeb8>：先站到一角 /lifelink wilderness pos1，再站另一角 /lifelink wilderness pos2。</#a9aeb8>"),
+            "wilderness-help-area" to chat("<#38bdf8>范围</#38bdf8><#a9aeb8>：chunk 当前区块；radius [半径] 周围区域；selection 使用 pos1/pos2。</#a9aeb8>"),
+            "wilderness-help-risk" to chat("<#facc15>风险</#facc15><#a9aeb8>：箱子/床/红石/TileState=高风险；告示牌/建筑分/资产索引=中风险。</#a9aeb8>"),
+            "wilderness-help-safety" to chat("<#ef4444>安全</#ef4444><#a9aeb8>：恢复前写快照；执行时再次跳过容器、红石、TileState、保护遮罩。</#a9aeb8>"),
+            "wilderness-help-rollback" to chat("<#22c55e>rollback [jobId]</#22c55e><#a9aeb8>：按恢复前快照回滚，jobId 可用 /lifelink wilderness jobs 查看。</#a9aeb8>"),
+            "wilderness-help-jobs" to chat("<#38bdf8>jobs/job</#38bdf8><#a9aeb8>：jobs 列出最近任务；job [id] 查看任务状态、恢复数量和跳过数量。</#a9aeb8>"),
+            "wilderness-help-examples" to chat("<#ffffff>示例</#ffffff><#a9aeb8>：/lifelink wilderness scan chunk；preview radius 32；restore surface 32；protect chunk。</#a9aeb8>")
         ),
         treeTypes = mapOf(
             "oak" to "Oak",
