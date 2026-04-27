@@ -18,6 +18,13 @@ import com.lifelink.treelifecycle.service.ReplantService
 import com.lifelink.treelifecycle.service.TreeDetectionService
 import com.lifelink.treelifecycle.service.TreeLifecycleService
 import com.lifelink.treelifecycle.service.TreeProtectionService
+import com.lifelink.treelifecycle.wilderness.AssetEventListener
+import com.lifelink.treelifecycle.wilderness.AssetIndexService
+import com.lifelink.treelifecycle.wilderness.ManualProtectionService
+import com.lifelink.treelifecycle.wilderness.WildernessCommand
+import com.lifelink.treelifecycle.wilderness.WildernessRepository
+import com.lifelink.treelifecycle.wilderness.WildernessRestoreService
+import com.lifelink.treelifecycle.wilderness.WildernessSnapshot
 import org.bukkit.plugin.java.JavaPlugin
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -30,6 +37,7 @@ class LifeLinkPlugin : JavaPlugin() {
     private lateinit var langService: LangService
     private lateinit var messageService: MessageService
     private var repository: TreeRepository? = null
+    private var wildernessRepository: WildernessRepository? = null
     private var recoveryService: RecoveryService? = null
 
     override fun onEnable() {
@@ -50,7 +58,13 @@ class LifeLinkPlugin : JavaPlugin() {
                 val stateFile = dataFolder.toPath().resolve(config.persistence.fileName)
                 val repo = LocalAsyncRepository(stateFile, config.persistence.flushDelayMillis, logger)
                 repository = repo
-                repo.loadAsync().thenApply { snapshot -> config to snapshot }
+                repo.loadAsync().thenCompose { snapshot ->
+                    val wildernessRepo = WildernessRepository(dataFolder.toPath().resolve("data/wilderness"), logger)
+                    wildernessRepository = wildernessRepo
+                    wildernessRepo.loadAsync().thenApply { wildernessSnapshot ->
+                        EnableState(config, snapshot, wildernessSnapshot)
+                    }
+                }
             }
             .whenComplete { result, error ->
                 if (error != null) {
@@ -60,16 +74,18 @@ class LifeLinkPlugin : JavaPlugin() {
                 }
                 scheduler.runGlobal {
                     if (!isEnabled) return@runGlobal
-                    finishEnable(result.first, result.second)
+                    finishEnable(result.config, result.snapshot, result.wildernessSnapshot)
                 }
             }
     }
 
     private fun finishEnable(
         config: com.lifelink.treelifecycle.config.AppConfig,
-        snapshot: com.lifelink.treelifecycle.domain.RepositorySnapshot
+        snapshot: com.lifelink.treelifecycle.domain.RepositorySnapshot,
+        wildernessSnapshot: WildernessSnapshot
     ) {
         val repo = repository ?: error("Repository was not initialized")
+        val wildernessRepo = wildernessRepository ?: error("Wilderness repository was not initialized")
         val detectionService = TreeDetectionService(configService)
         val lifecycleService = TreeLifecycleService(repo, logger)
         lifecycleService.loadSnapshot(snapshot)
@@ -77,6 +93,23 @@ class LifeLinkPlugin : JavaPlugin() {
         val replantService = ReplantService(configService, lifecycleService, scheduler, logger)
         val recovery = RecoveryService(configService, lifecycleService, detectionService, replantService, scheduler, logger)
         val adminSaplingModeService = AdminSaplingModeService()
+        val assetIndexService = AssetIndexService(wildernessSnapshot, wildernessRepo, logger)
+        val manualProtectionService = ManualProtectionService(wildernessSnapshot, wildernessRepo, logger)
+        val wildernessRestoreService = WildernessRestoreService(
+            wildernessSnapshot,
+            configService,
+            scheduler,
+            wildernessRepo,
+            assetIndexService,
+            manualProtectionService,
+            logger
+        )
+        val wildernessCommand = WildernessCommand(
+            wildernessRestoreService,
+            manualProtectionService,
+            messageService,
+            scheduler
+        )
         recoveryService = recovery
 
         server.pluginManager.registerEvents(
@@ -95,6 +128,7 @@ class LifeLinkPlugin : JavaPlugin() {
         server.pluginManager.registerEvents(TreeProtectionListener(protectionService, messageService), this)
         server.pluginManager.registerEvents(FarmlandProtectionListener(configService), this)
         server.pluginManager.registerEvents(PlantReplantListener(configService, messageService), this)
+        server.pluginManager.registerEvents(AssetEventListener(assetIndexService), this)
 
         val command = LifeLinkCommand(
             configService,
@@ -102,6 +136,7 @@ class LifeLinkPlugin : JavaPlugin() {
             messageService,
             scheduler,
             adminSaplingModeService,
+            wildernessCommand,
             { recoveryService },
             logger
         )
@@ -112,15 +147,23 @@ class LifeLinkPlugin : JavaPlugin() {
             val queued = recovery.recoverStartup()
             logger.info("LifeLink recovery queued $queued checks.")
         }
+        wildernessRestoreService.recoverUnfinishedJobs()
         logger.info("LifeLink enabled. Folia scheduler mode: ${scheduler.folia}")
     }
 
     override fun onDisable() {
         runCatching { repository?.close() }
+        runCatching { wildernessRepository?.close() }
         runCatching { messageService.close() }
         runCatching { scheduler.close() }
         if (::ioExecutor.isInitialized) {
             ioExecutor.shutdown()
         }
     }
+
+    private data class EnableState(
+        val config: com.lifelink.treelifecycle.config.AppConfig,
+        val snapshot: com.lifelink.treelifecycle.domain.RepositorySnapshot,
+        val wildernessSnapshot: WildernessSnapshot
+    )
 }

@@ -40,6 +40,13 @@ class MessageService(
         }
     }
 
+    fun playSound(sender: CommandSender, key: String) {
+        val player = sender as? Player ?: return
+        val sound = langService.current().sound(key) ?: return
+        if (!sound.enabled) return
+        player.playSound(player.location, sound.name, sound.volume, sound.pitch)
+    }
+
     fun treeTypeName(key: String): String = langService.current().treeTypeName(key)
 
     fun standardPlaceholders(player: Player?, world: String?, x: Int?, y: Int?, z: Int?): Map<String, String> =

@@ -1,3 +1,4 @@
+prefix: "<gradient:#22c55e:#38bdf8><bold>LifeLink</bold></gradient> <dark_gray>»</dark_gray>"
 messages:
   # Plugin message prefix, MiniMessage format.
   prefix: "<#48CAE4>✦ LifeLink</#48CAE4> <#A9AEB8>»</#A9AEB8> "
@@ -41,6 +42,97 @@ messages:
     type: chat
     text: "<prefix><#8BE9FD>Usage: /lifelink <#50FA7B>reload</#50FA7B>, <#50FA7B>recover</#50FA7B>, or <#50FA7B>saplingmode</#50FA7B></#8BE9FD>"
 
+
+  status-summary:
+    type: chat
+    text: "<prefix><#38bdf8>LifeLink is running with tree lifecycle and conservative wilderness restore modules loaded.</#38bdf8>"
+  inspect-usage:
+    type: chat
+    text: "<prefix><#38bdf8>Use wilderness scan, preview, or protect commands after targeting an area.</#38bdf8>"
+  debug-summary:
+    type: chat
+    text: "<prefix><#38bdf8>Debug target <#ffffff><target></#ffffff>, Folia=<#ffffff><folia></#ffffff>.</#38bdf8>"
+  wilderness-command-usage:
+    type: chat
+    text: "<prefix><#38bdf8>Usage: /lifelink wilderness scan|preview|restore|protect|confirm|rollback|jobs.</#38bdf8>"
+  wilderness-scan-start:
+    type: chat
+    text: "<prefix><#38bdf8>Scanning wilderness area in <#ffffff><world></#ffffff>, range <#ffffff><radius></#ffffff>.</#38bdf8>"
+  wilderness-scan-finished:
+    type: chat
+    text: "<prefix><#22c55e>Scan complete: low <#ffffff><low></#ffffff>, medium <#ffffff><medium></#ffffff>, high <#ffffff><high></#ffffff>, build score <#ffffff><build></#ffffff>, assets <#ffffff><assets></#ffffff>.</#22c55e>"
+  wilderness-preview-created:
+    type: chat
+    text: "<prefix><#38bdf8>Wilderness preview created. Green=restorable, yellow=confirm required, red=protected.</#38bdf8>"
+  wilderness-preview-cleared:
+    type: chat
+    text: "<prefix><#a78bfa>Wilderness preview cleared.</#a78bfa>"
+  wilderness-restore-created:
+    type: chat
+    text: "<prefix><#38bdf8>Wilderness restore job created: <#ffffff><job_id></#ffffff>.</#38bdf8>"
+  wilderness-confirm-required:
+    type: chat
+    text: "<prefix><#facc15>This job contains medium-risk areas. Run <#ffffff>/lifelink wilderness confirm <job_id></#ffffff> to continue.</#facc15>"
+  wilderness-restore-started:
+    type: chat
+    text: "<prefix><#38bdf8>Wilderness restore job <#ffffff><job_id></#ffffff> started.</#38bdf8>"
+  wilderness-restore-completed:
+    type: chat
+    text: "<prefix><#22c55e>Wilderness restore job <#ffffff><job_id></#ffffff> completed, restored <#ffffff><blocks></#ffffff> blocks and skipped <#ffffff><skipped></#ffffff> protected blocks.</#22c55e>"
+  wilderness-restore-failed:
+    type: chat
+    text: "<prefix><#ef4444>Wilderness restore job <#ffffff><job_id></#ffffff> failed: <#ffffff><reason></#ffffff></#ef4444>"
+  wilderness-rollback-started:
+    type: chat
+    text: "<prefix><#facc15>Wilderness rollback job <#ffffff><job_id></#ffffff> started.</#facc15>"
+  wilderness-rollback-completed:
+    type: chat
+    text: "<prefix><#22c55e>Wilderness rollback job <#ffffff><job_id></#ffffff> completed.</#22c55e>"
+  wilderness-protected-hit:
+    type: actionbar
+    text: "<prefix><#facc15>This area contains player assets and was skipped.</#facc15>"
+  wilderness-container-found:
+    type: chat
+    text: "<prefix><#ef4444>Container or inventory assets found; automatic restore is denied by default.</#ef4444>"
+  wilderness-redstone-found:
+    type: chat
+    text: "<prefix><#ef4444>Redstone machinery found; automatic restore is denied by default.</#ef4444>"
+  wilderness-building-found:
+    type: chat
+    text: "<prefix><#facc15>Possible player building found and marked as medium/high risk.</#facc15>"
+  wilderness-selection-missing:
+    type: chat
+    text: "<prefix><#facc15>Set a selection first with /lifelink wilderness pos1 and pos2.</#facc15>"
+  wilderness-pos-set:
+    type: chat
+    text: "<prefix><#22c55e>Set <#ffffff><pos></#ffffff>.</#22c55e>"
+  wilderness-protect-created:
+    type: chat
+    text: "<prefix><#22c55e>Created manual protected area <#ffffff><name></#ffffff> (<#ffffff><id></#ffffff>).</#22c55e>"
+  wilderness-protect-line:
+    type: chat
+    text: "<prefix><#38bdf8>Protected area <#ffffff><id></#ffffff>: <#ffffff><name></#ffffff></#38bdf8>"
+  wilderness-protect-removed:
+    type: chat
+    text: "<prefix><#22c55e>Removed manual protected area <#ffffff><id></#ffffff>.</#22c55e>"
+  wilderness-job-line:
+    type: chat
+    text: "<prefix><#38bdf8>Job <#ffffff><job_id></#ffffff>: <#ffffff><status></#ffffff> / <#ffffff><mode></#ffffff> / blocks <#ffffff><blocks></#ffffff></#38bdf8>"
+  wilderness-job-detail:
+    type: chat
+    text: "<prefix><#38bdf8>Job <#ffffff><job_id></#ffffff> status <#ffffff><status></#ffffff>, mode <#ffffff><mode></#ffffff>, blocks <#ffffff><blocks></#ffffff>, skipped <#ffffff><skipped></#ffffff>, reason <#ffffff><reason></#ffffff>.</#38bdf8>"
+  wilderness-jobs-empty:
+    type: chat
+    text: "<prefix><#a9aeb8>No wilderness restore jobs.</#a9aeb8>"
+  wilderness-job-not-found:
+    type: chat
+    text: "<prefix><#ef4444>Job or protected area not found: <#ffffff><job_id></#ffffff>.</#ef4444>"
+  wilderness-job-cancelled:
+    type: chat
+    text: "<prefix><#facc15>Cancelled wilderness restore job <#ffffff><job_id></#ffffff>.</#facc15>"
+  wilderness-job-not-confirmable:
+    type: chat
+    text: "<prefix><#facc15>This job is not waiting for confirmation.</#facc15>"
 tree-types:
   oak: "Oak"
   birch: "Birch"
@@ -51,3 +143,35 @@ tree-types:
   mangrove: "Mangrove"
   cherry: "Cherry"
   pale_oak: "Pale Oak"
+
+sounds:
+  success:
+    enabled: true
+    name: "minecraft:block.note_block.pling"
+    volume: 1.0
+    pitch: 1.2
+  error:
+    enabled: true
+    name: "minecraft:block.note_block.bass"
+    volume: 1.0
+    pitch: 0.7
+  warning:
+    enabled: true
+    name: "minecraft:block.note_block.bit"
+    volume: 1.0
+    pitch: 0.9
+  replant:
+    enabled: true
+    name: "minecraft:item.crop.plant"
+    volume: 0.8
+    pitch: 1.0
+  wilderness-preview:
+    enabled: true
+    name: "minecraft:block.amethyst_block.chime"
+    volume: 0.8
+    pitch: 1.4
+  wilderness-restore:
+    enabled: true
+    name: "minecraft:block.grass.place"
+    volume: 0.8
+    pitch: 1.1

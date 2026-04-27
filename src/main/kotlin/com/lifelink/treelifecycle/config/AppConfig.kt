@@ -14,7 +14,8 @@ data class AppConfig(
     val detection: DetectionConfig,
     val effects: EffectsConfig,
     val plants: PlantsConfig,
-    val persistence: PersistenceConfig
+    val persistence: PersistenceConfig,
+    val wilderness: WildernessConfig
 ) {
     companion object {
         fun defaults(): AppConfig = AppConfig(
@@ -79,6 +80,68 @@ data class AppConfig(
                 fileName = "data/state.properties",
                 flushDelayMillis = 250,
                 terminalTaskRetentionSeconds = 86400
+            ),
+            wilderness = WildernessConfig(
+                enabled = true,
+                originWorld = WildernessOriginWorldConfig(
+                    name = "world_origin",
+                    autoCreate = false,
+                    readonly = true
+                ),
+                safety = WildernessSafetyConfig(
+                    defaultMode = "SAFE",
+                    denyContainerOverwrite = true,
+                    denyInventoryHolderOverwrite = true,
+                    denyTileStateOverwrite = true,
+                    denyEntityItemOverwrite = true,
+                    requireConfirmForMediumRisk = true,
+                    requireConfirmForForce = true,
+                    failClosedOnUnknownState = true
+                ),
+                protection = WildernessProtectionConfig(
+                    containerPaddingXz = 16,
+                    containerPaddingY = 32,
+                    bedPaddingXz = 24,
+                    bedPaddingY = 32,
+                    signPaddingXz = 16,
+                    signPaddingY = 24,
+                    redstonePaddingXz = 24,
+                    redstonePaddingY = 32,
+                    buildingPaddingXz = 12,
+                    buildingPaddingY = 24,
+                    manualPaddingXz = 0,
+                    manualPaddingY = 0
+                ),
+                scanner = WildernessScannerConfig(
+                    maxChunksPerScan = 256,
+                    maxBlocksPerRegionTick = 4096,
+                    surfaceRestoreMinOffset = -8,
+                    surfaceRestoreMaxOffset = 24,
+                    lowRiskMaxBuildScore = 30,
+                    mediumRiskMaxBuildScore = 120,
+                    highRiskMinBuildScore = 121,
+                    damageThreshold = 1000
+                ),
+                performance = WildernessPerformanceConfig(
+                    maxBlocksApplyPerRegionTick = 2048,
+                    maxJobsRunning = 1,
+                    maxRegionJobsRunning = 4,
+                    requireTpsAbove = 18.5,
+                    requireMsptBelow = 45.0,
+                    pauseWhenPlayerNearby = true,
+                    playerSafeDistance = 96
+                ),
+                backup = WildernessBackupConfig(
+                    compression = "gzip",
+                    atomicWrite = true,
+                    keepDays = 30,
+                    verifyHash = true
+                ),
+                preview = WildernessPreviewConfig(
+                    particleEnabled = true,
+                    particleDurationSeconds = 30,
+                    useClientBlockPreview = false
+                )
             )
         )
     }
@@ -151,4 +214,81 @@ data class PersistenceConfig(
     val fileName: String,
     val flushDelayMillis: Long,
     val terminalTaskRetentionSeconds: Long
+)
+
+data class WildernessConfig(
+    val enabled: Boolean,
+    val originWorld: WildernessOriginWorldConfig,
+    val safety: WildernessSafetyConfig,
+    val protection: WildernessProtectionConfig,
+    val scanner: WildernessScannerConfig,
+    val performance: WildernessPerformanceConfig,
+    val backup: WildernessBackupConfig,
+    val preview: WildernessPreviewConfig
+)
+
+data class WildernessOriginWorldConfig(
+    val name: String,
+    val autoCreate: Boolean,
+    val readonly: Boolean
+)
+
+data class WildernessSafetyConfig(
+    val defaultMode: String,
+    val denyContainerOverwrite: Boolean,
+    val denyInventoryHolderOverwrite: Boolean,
+    val denyTileStateOverwrite: Boolean,
+    val denyEntityItemOverwrite: Boolean,
+    val requireConfirmForMediumRisk: Boolean,
+    val requireConfirmForForce: Boolean,
+    val failClosedOnUnknownState: Boolean
+)
+
+data class WildernessProtectionConfig(
+    val containerPaddingXz: Int,
+    val containerPaddingY: Int,
+    val bedPaddingXz: Int,
+    val bedPaddingY: Int,
+    val signPaddingXz: Int,
+    val signPaddingY: Int,
+    val redstonePaddingXz: Int,
+    val redstonePaddingY: Int,
+    val buildingPaddingXz: Int,
+    val buildingPaddingY: Int,
+    val manualPaddingXz: Int,
+    val manualPaddingY: Int
+)
+
+data class WildernessScannerConfig(
+    val maxChunksPerScan: Int,
+    val maxBlocksPerRegionTick: Int,
+    val surfaceRestoreMinOffset: Int,
+    val surfaceRestoreMaxOffset: Int,
+    val lowRiskMaxBuildScore: Int,
+    val mediumRiskMaxBuildScore: Int,
+    val highRiskMinBuildScore: Int,
+    val damageThreshold: Int
+)
+
+data class WildernessPerformanceConfig(
+    val maxBlocksApplyPerRegionTick: Int,
+    val maxJobsRunning: Int,
+    val maxRegionJobsRunning: Int,
+    val requireTpsAbove: Double,
+    val requireMsptBelow: Double,
+    val pauseWhenPlayerNearby: Boolean,
+    val playerSafeDistance: Int
+)
+
+data class WildernessBackupConfig(
+    val compression: String,
+    val atomicWrite: Boolean,
+    val keepDays: Int,
+    val verifyHash: Boolean
+)
+
+data class WildernessPreviewConfig(
+    val particleEnabled: Boolean,
+    val particleDurationSeconds: Int,
+    val useClientBlockPreview: Boolean
 )

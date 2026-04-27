@@ -37,8 +37,7 @@ class ReplantService(
                 ReplantTaskStatus.RESERVED,
                 ReplantTaskStatus.CUTTING_CONFIRMED,
                 ReplantTaskStatus.REPLANT_PENDING,
-                ReplantTaskStatus.REPLANT_SCHEDULED,
-                ReplantTaskStatus.FAILED
+                ReplantTaskStatus.REPLANT_SCHEDULED
             ),
             next = ReplantTaskStatus.REPLANT_SCHEDULED,
             reason = task.failureReason
@@ -66,8 +65,7 @@ class ReplantService(
                     ReplantTaskStatus.RESERVED,
                     ReplantTaskStatus.CUTTING_CONFIRMED,
                     ReplantTaskStatus.REPLANT_PENDING,
-                    ReplantTaskStatus.REPLANT_SCHEDULED,
-                    ReplantTaskStatus.FAILED
+                    ReplantTaskStatus.REPLANT_SCHEDULED
                 ),
                 next = ReplantTaskStatus.REPLANT_PENDING
             ) ?: lifecycleService.task(taskId) ?: return
@@ -171,8 +169,19 @@ class ReplantService(
                 }
             }
             FailureStrategy.DROP_SAPLING -> {
-                dropSaplings(task, fromRegionThread)
-                lifecycleService.completeTask(task, ReplantTaskStatus.FAILED, reason)
+                if (task.failureReason == DROP_SAPLING_DELIVERED) {
+                    lifecycleService.completeTask(task, ReplantTaskStatus.FAILED, reason)
+                    return
+                }
+                val marked = task.transition(
+                    next = ReplantTaskStatus.REPLANT_PENDING,
+                    now = System.currentTimeMillis(),
+                    reason = DROP_SAPLING_DELIVERED,
+                    attempts = task.attempts + 1
+                )
+                lifecycleService.saveTask(marked)
+                dropSaplings(marked, fromRegionThread)
+                lifecycleService.completeTask(marked, ReplantTaskStatus.FAILED, reason)
             }
             FailureStrategy.RECORD_AND_RECOVER -> {
                 val updated = task.transition(
@@ -222,5 +231,6 @@ class ReplantService(
 
     companion object {
         private const val ROOT_STILL_PRESENT = "root-still-present"
+        private const val DROP_SAPLING_DELIVERED = "drop-sapling-delivered"
     }
 }

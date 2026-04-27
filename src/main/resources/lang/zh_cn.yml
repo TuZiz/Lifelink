@@ -1,3 +1,4 @@
+prefix: "<gradient:#22c55e:#38bdf8><bold>LifeLink</bold></gradient> <dark_gray>»</dark_gray>"
 messages:
   # 插件消息前缀：独立配置，正文通过 <prefix> 引用。
   prefix: "<#48CAE4>✦ 生生不息</#48CAE4> <#A9AEB8>»</#A9AEB8> "
@@ -70,6 +71,126 @@ messages:
     type: chat
     text: "<prefix><#48CAE4>用法: /lifelink <#4DDB86>reload</#4DDB86>、<#4DDB86>recover</#4DDB86> 或 <#4DDB86>saplingmode</#4DDB86></#48CAE4>"
 
+
+  status-summary:
+    type: chat
+    text: "<prefix><#38bdf8>LifeLink 运行中：树木生命周期与保守型荒野修复模块已加载。</#38bdf8>"
+
+  inspect-usage:
+    type: chat
+    text: "<prefix><#38bdf8>请看准目标方块后使用荒野 scan/preview/protect 指令进行检查。</#38bdf8>"
+
+  debug-summary:
+    type: chat
+    text: "<prefix><#38bdf8>调试目标 <#ffffff><target></#ffffff>，Folia=<#ffffff><folia></#ffffff>。</#38bdf8>"
+
+  wilderness-command-usage:
+    type: chat
+    text: "<prefix><#38bdf8>用法: /lifelink wilderness scan|preview|restore|protect|confirm|rollback|jobs。</#38bdf8>"
+
+  wilderness-scan-start:
+    type: chat
+    text: "<prefix><#38bdf8>开始扫描荒野区域：<#ffffff><world></#ffffff>，范围 <#ffffff><radius></#ffffff>。</#38bdf8>"
+
+  wilderness-scan-finished:
+    type: chat
+    text: "<prefix><#22c55e>扫描完成：低风险 <#ffffff><low></#ffffff>，中风险 <#ffffff><medium></#ffffff>，高风险 <#ffffff><high></#ffffff>，建筑分 <#ffffff><build></#ffffff>，疑似资产 <#ffffff><assets></#ffffff>。</#22c55e>"
+
+  wilderness-preview-created:
+    type: chat
+    text: "<prefix><#38bdf8>已生成荒野修复预览。绿色=可恢复，黄色=需确认，红色=保护区域。</#38bdf8>"
+
+  wilderness-preview-cleared:
+    type: chat
+    text: "<prefix><#a78bfa>已清除荒野修复预览。</#a78bfa>"
+
+  wilderness-restore-created:
+    type: chat
+    text: "<prefix><#38bdf8>荒野修复任务已创建：<#ffffff><job_id></#ffffff>。</#38bdf8>"
+
+  wilderness-confirm-required:
+    type: chat
+    text: "<prefix><#facc15>该任务包含中风险区域，需要执行 <#ffffff>/lifelink wilderness confirm <job_id></#ffffff> 确认。</#facc15>"
+
+  wilderness-restore-started:
+    type: chat
+    text: "<prefix><#38bdf8>荒野修复任务 <#ffffff><job_id></#ffffff> 已开始。</#38bdf8>"
+
+  wilderness-restore-completed:
+    type: chat
+    text: "<prefix><#22c55e>荒野修复任务 <#ffffff><job_id></#ffffff> 已完成，恢复 <#ffffff><blocks></#ffffff> 个方块，跳过 <#ffffff><skipped></#ffffff> 个保护方块。</#22c55e>"
+
+  wilderness-restore-failed:
+    type: chat
+    text: "<prefix><#ef4444>荒野修复任务 <#ffffff><job_id></#ffffff> 失败：<#ffffff><reason></#ffffff></#ef4444>"
+
+  wilderness-rollback-started:
+    type: chat
+    text: "<prefix><#facc15>荒野回滚任务 <#ffffff><job_id></#ffffff> 已开始。</#facc15>"
+
+  wilderness-rollback-completed:
+    type: chat
+    text: "<prefix><#22c55e>荒野回滚任务 <#ffffff><job_id></#ffffff> 已完成。</#22c55e>"
+
+  wilderness-protected-hit:
+    type: actionbar
+    text: "<prefix><#facc15>该区域包含玩家资产，已自动跳过。</#facc15>"
+
+  wilderness-container-found:
+    type: chat
+    text: "<prefix><#ef4444>检测到容器或库存资产，默认禁止自动恢复。</#ef4444>"
+
+  wilderness-redstone-found:
+    type: chat
+    text: "<prefix><#ef4444>检测到红石机器，默认禁止自动恢复。</#ef4444>"
+
+  wilderness-building-found:
+    type: chat
+    text: "<prefix><#facc15>检测到疑似玩家建筑，已标记为中/高风险。</#facc15>"
+
+  wilderness-selection-missing:
+    type: chat
+    text: "<prefix><#facc15>请先使用 /lifelink wilderness pos1 和 pos2 设置选区。</#facc15>"
+
+  wilderness-pos-set:
+    type: chat
+    text: "<prefix><#22c55e>已设置 <#ffffff><pos></#ffffff>。</#22c55e>"
+
+  wilderness-protect-created:
+    type: chat
+    text: "<prefix><#22c55e>已创建手动保护区 <#ffffff><name></#ffffff>（<#ffffff><id></#ffffff>）。</#22c55e>"
+
+  wilderness-protect-line:
+    type: chat
+    text: "<prefix><#38bdf8>保护区 <#ffffff><id></#ffffff>：<#ffffff><name></#ffffff></#38bdf8>"
+
+  wilderness-protect-removed:
+    type: chat
+    text: "<prefix><#22c55e>已移除手动保护区 <#ffffff><id></#ffffff>。</#22c55e>"
+
+  wilderness-job-line:
+    type: chat
+    text: "<prefix><#38bdf8>任务 <#ffffff><job_id></#ffffff>：<#ffffff><status></#ffffff> / <#ffffff><mode></#ffffff> / 方块 <#ffffff><blocks></#ffffff></#38bdf8>"
+
+  wilderness-job-detail:
+    type: chat
+    text: "<prefix><#38bdf8>任务 <#ffffff><job_id></#ffffff> 状态 <#ffffff><status></#ffffff>，模式 <#ffffff><mode></#ffffff>，方块 <#ffffff><blocks></#ffffff>，跳过 <#ffffff><skipped></#ffffff>，原因 <#ffffff><reason></#ffffff>。</#38bdf8>"
+
+  wilderness-jobs-empty:
+    type: chat
+    text: "<prefix><#a9aeb8>当前没有荒野修复任务。</#a9aeb8>"
+
+  wilderness-job-not-found:
+    type: chat
+    text: "<prefix><#ef4444>未找到任务或保护区：<#ffffff><job_id></#ffffff>。</#ef4444>"
+
+  wilderness-job-cancelled:
+    type: chat
+    text: "<prefix><#facc15>已取消荒野修复任务 <#ffffff><job_id></#ffffff>。</#facc15>"
+
+  wilderness-job-not-confirmable:
+    type: chat
+    text: "<prefix><#facc15>该任务当前状态不需要确认或不能确认。</#facc15>"
 tree-types:
   oak: "橡木"
   birch: "白桦木"
@@ -80,3 +201,35 @@ tree-types:
   mangrove: "红树木"
   cherry: "樱花木"
   pale_oak: "苍白橡木"
+
+sounds:
+  success:
+    enabled: true
+    name: "minecraft:block.note_block.pling"
+    volume: 1.0
+    pitch: 1.2
+  error:
+    enabled: true
+    name: "minecraft:block.note_block.bass"
+    volume: 1.0
+    pitch: 0.7
+  warning:
+    enabled: true
+    name: "minecraft:block.note_block.bit"
+    volume: 1.0
+    pitch: 0.9
+  replant:
+    enabled: true
+    name: "minecraft:item.crop.plant"
+    volume: 0.8
+    pitch: 1.0
+  wilderness-preview:
+    enabled: true
+    name: "minecraft:block.amethyst_block.chime"
+    volume: 0.8
+    pitch: 1.4
+  wilderness-restore:
+    enabled: true
+    name: "minecraft:block.grass.place"
+    volume: 0.8
+    pitch: 1.1

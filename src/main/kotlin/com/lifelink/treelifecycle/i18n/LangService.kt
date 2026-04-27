@@ -45,13 +45,20 @@ class LangService(
         yaml.getConfigurationSection("tree-types")?.getKeys(false)?.forEach { key ->
             treeTypes[key] = yaml.getString("tree-types.$key", key)!!
         }
-        val languagePrefix = yaml.getString("messages.prefix", prefix)!!
+        val sounds = linkedMapOf<String, SoundDefinition>()
+        yaml.getConfigurationSection("sounds")?.getKeys(false)?.forEach { key ->
+            yaml.getConfigurationSection("sounds.$key")?.let { sounds[key] = parseSound(it) }
+        }
+        val languagePrefix = yaml.getString("prefix")
+            ?: yaml.getString("messages.prefix")
+            ?: prefix
 
         return defaultBundle().copy(
             locale = locale,
             prefix = languagePrefix,
             messages = defaultBundle().messages + messages,
-            treeTypes = defaultBundle().treeTypes + builtInTreeTypes(locale) + treeTypes
+            treeTypes = defaultBundle().treeTypes + builtInTreeTypes(locale) + treeTypes,
+            sounds = defaultBundle().sounds + sounds
         )
     }
 
@@ -61,6 +68,14 @@ class LangService(
             text = section.getString("text", "")!!,
             title = section.getString("title"),
             subtitle = section.getString("subtitle")
+        )
+
+    private fun parseSound(section: ConfigurationSection): SoundDefinition =
+        SoundDefinition(
+            enabled = section.getBoolean("enabled", true),
+            name = section.getString("name", "minecraft:block.note_block.pling")!!,
+            volume = section.getDouble("volume", 1.0).toFloat().coerceIn(0.0f, 10.0f),
+            pitch = section.getDouble("pitch", 1.0).toFloat().coerceIn(0.0f, 2.0f)
         )
 
     private fun builtInTreeTypes(locale: String): Map<String, String> =
@@ -193,6 +208,14 @@ class LangService(
             "mangrove" to "Mangrove",
             "cherry" to "Cherry",
             "pale_oak" to "Pale Oak"
+        ),
+        sounds = mapOf(
+            "success" to SoundDefinition(true, "minecraft:block.note_block.pling", 1.0f, 1.2f),
+            "error" to SoundDefinition(true, "minecraft:block.note_block.bass", 1.0f, 0.7f),
+            "warning" to SoundDefinition(true, "minecraft:block.note_block.bit", 1.0f, 0.9f),
+            "replant" to SoundDefinition(true, "minecraft:item.crop.plant", 0.8f, 1.0f),
+            "wilderness-preview" to SoundDefinition(true, "minecraft:block.amethyst_block.chime", 0.8f, 1.4f),
+            "wilderness-restore" to SoundDefinition(true, "minecraft:block.grass.place", 0.8f, 1.1f)
         )
     )
 }

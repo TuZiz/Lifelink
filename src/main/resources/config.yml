@@ -106,3 +106,69 @@ persistence:
   flush-delay-millis: 250
   # 终态任务保留秒数，超过后恢复流程会清理旧记录。
   terminal-task-retention-seconds: 86400
+
+# 老服保守型荒野修复系统：默认保守，先扫描保护玩家资产，再恢复低风险荒野。
+wilderness:
+  enabled: true
+
+  origin-world:
+    # 自然母本世界名称。请用同版本、同种子、同生成器、同数据包生成干净世界。
+    name: "world_origin"
+    # 默认不擅自创建母本世界，避免误用错误种子或生成器。
+    auto-create: false
+    # 逻辑约定只读；LifeLink 不会向母本世界写入恢复结果。
+    readonly: true
+
+  safety:
+    default-mode: "SAFE"
+    deny-container-overwrite: true
+    deny-inventory-holder-overwrite: true
+    deny-tile-state-overwrite: true
+    deny-entity-item-overwrite: true
+    require-confirm-for-medium-risk: true
+    require-confirm-for-force: true
+    fail-closed-on-unknown-state: true
+
+  protection:
+    container-padding-xz: 16
+    container-padding-y: 32
+    bed-padding-xz: 24
+    bed-padding-y: 32
+    sign-padding-xz: 16
+    sign-padding-y: 24
+    redstone-padding-xz: 24
+    redstone-padding-y: 32
+    building-padding-xz: 12
+    building-padding-y: 24
+    manual-padding-xz: 0
+    manual-padding-y: 0
+
+  scanner:
+    max-chunks-per-scan: 256
+    max-blocks-per-region-tick: 4096
+    surface-restore-min-offset: -8
+    surface-restore-max-offset: 24
+    low-risk-max-build-score: 30
+    medium-risk-max-build-score: 120
+    high-risk-min-build-score: 121
+    damage-threshold: 1000
+
+  performance:
+    max-blocks-apply-per-region-tick: 2048
+    max-jobs-running: 1
+    max-region-jobs-running: 4
+    require-tps-above: 18.5
+    require-mspt-below: 45.0
+    pause-when-player-nearby: true
+    player-safe-distance: 96
+
+  backup:
+    compression: "gzip"
+    atomic-write: true
+    keep-days: 30
+    verify-hash: true
+
+  preview:
+    particle-enabled: true
+    particle-duration-seconds: 30
+    use-client-block-preview: false

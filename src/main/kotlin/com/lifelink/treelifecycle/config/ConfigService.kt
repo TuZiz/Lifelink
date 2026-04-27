@@ -173,6 +173,183 @@ class ConfigService(
                     "persistence.terminal-task-retention-seconds",
                     defaults.persistence.terminalTaskRetentionSeconds
                 ).coerceAtLeast(60)
+            ),
+            wilderness = WildernessConfig(
+                enabled = yaml.getBoolean("wilderness.enabled", defaults.wilderness.enabled),
+                originWorld = WildernessOriginWorldConfig(
+                    name = yaml.getString("wilderness.origin-world.name", defaults.wilderness.originWorld.name)!!,
+                    autoCreate = yaml.getBoolean(
+                        "wilderness.origin-world.auto-create",
+                        defaults.wilderness.originWorld.autoCreate
+                    ),
+                    readonly = yaml.getBoolean(
+                        "wilderness.origin-world.readonly",
+                        defaults.wilderness.originWorld.readonly
+                    )
+                ),
+                safety = WildernessSafetyConfig(
+                    defaultMode = yaml.getString("wilderness.safety.default-mode", defaults.wilderness.safety.defaultMode)!!
+                        .uppercase(Locale.ROOT),
+                    denyContainerOverwrite = yaml.getBoolean(
+                        "wilderness.safety.deny-container-overwrite",
+                        defaults.wilderness.safety.denyContainerOverwrite
+                    ),
+                    denyInventoryHolderOverwrite = yaml.getBoolean(
+                        "wilderness.safety.deny-inventory-holder-overwrite",
+                        defaults.wilderness.safety.denyInventoryHolderOverwrite
+                    ),
+                    denyTileStateOverwrite = yaml.getBoolean(
+                        "wilderness.safety.deny-tile-state-overwrite",
+                        defaults.wilderness.safety.denyTileStateOverwrite
+                    ),
+                    denyEntityItemOverwrite = yaml.getBoolean(
+                        "wilderness.safety.deny-entity-item-overwrite",
+                        defaults.wilderness.safety.denyEntityItemOverwrite
+                    ),
+                    requireConfirmForMediumRisk = yaml.getBoolean(
+                        "wilderness.safety.require-confirm-for-medium-risk",
+                        defaults.wilderness.safety.requireConfirmForMediumRisk
+                    ),
+                    requireConfirmForForce = yaml.getBoolean(
+                        "wilderness.safety.require-confirm-for-force",
+                        defaults.wilderness.safety.requireConfirmForForce
+                    ),
+                    failClosedOnUnknownState = yaml.getBoolean(
+                        "wilderness.safety.fail-closed-on-unknown-state",
+                        defaults.wilderness.safety.failClosedOnUnknownState
+                    )
+                ),
+                protection = WildernessProtectionConfig(
+                    containerPaddingXz = yaml.getInt(
+                        "wilderness.protection.container-padding-xz",
+                        defaults.wilderness.protection.containerPaddingXz
+                    ).coerceIn(0, 128),
+                    containerPaddingY = yaml.getInt(
+                        "wilderness.protection.container-padding-y",
+                        defaults.wilderness.protection.containerPaddingY
+                    ).coerceIn(0, 128),
+                    bedPaddingXz = yaml.getInt("wilderness.protection.bed-padding-xz", defaults.wilderness.protection.bedPaddingXz)
+                        .coerceIn(0, 128),
+                    bedPaddingY = yaml.getInt("wilderness.protection.bed-padding-y", defaults.wilderness.protection.bedPaddingY)
+                        .coerceIn(0, 128),
+                    signPaddingXz = yaml.getInt(
+                        "wilderness.protection.sign-padding-xz",
+                        defaults.wilderness.protection.signPaddingXz
+                    ).coerceIn(0, 128),
+                    signPaddingY = yaml.getInt(
+                        "wilderness.protection.sign-padding-y",
+                        defaults.wilderness.protection.signPaddingY
+                    ).coerceIn(0, 128),
+                    redstonePaddingXz = yaml.getInt(
+                        "wilderness.protection.redstone-padding-xz",
+                        defaults.wilderness.protection.redstonePaddingXz
+                    ).coerceIn(0, 128),
+                    redstonePaddingY = yaml.getInt(
+                        "wilderness.protection.redstone-padding-y",
+                        defaults.wilderness.protection.redstonePaddingY
+                    ).coerceIn(0, 128),
+                    buildingPaddingXz = yaml.getInt(
+                        "wilderness.protection.building-padding-xz",
+                        defaults.wilderness.protection.buildingPaddingXz
+                    ).coerceIn(0, 128),
+                    buildingPaddingY = yaml.getInt(
+                        "wilderness.protection.building-padding-y",
+                        defaults.wilderness.protection.buildingPaddingY
+                    ).coerceIn(0, 128),
+                    manualPaddingXz = yaml.getInt(
+                        "wilderness.protection.manual-padding-xz",
+                        defaults.wilderness.protection.manualPaddingXz
+                    ).coerceIn(0, 128),
+                    manualPaddingY = yaml.getInt(
+                        "wilderness.protection.manual-padding-y",
+                        defaults.wilderness.protection.manualPaddingY
+                    ).coerceIn(0, 128)
+                ),
+                scanner = WildernessScannerConfig(
+                    maxChunksPerScan = yaml.getInt(
+                        "wilderness.scanner.max-chunks-per-scan",
+                        defaults.wilderness.scanner.maxChunksPerScan
+                    ).coerceIn(1, 4096),
+                    maxBlocksPerRegionTick = yaml.getInt(
+                        "wilderness.scanner.max-blocks-per-region-tick",
+                        defaults.wilderness.scanner.maxBlocksPerRegionTick
+                    ).coerceIn(256, 65536),
+                    surfaceRestoreMinOffset = yaml.getInt(
+                        "wilderness.scanner.surface-restore-min-offset",
+                        defaults.wilderness.scanner.surfaceRestoreMinOffset
+                    ).coerceIn(-64, 0),
+                    surfaceRestoreMaxOffset = yaml.getInt(
+                        "wilderness.scanner.surface-restore-max-offset",
+                        defaults.wilderness.scanner.surfaceRestoreMaxOffset
+                    ).coerceIn(0, 128),
+                    lowRiskMaxBuildScore = yaml.getInt(
+                        "wilderness.scanner.low-risk-max-build-score",
+                        defaults.wilderness.scanner.lowRiskMaxBuildScore
+                    ).coerceAtLeast(0),
+                    mediumRiskMaxBuildScore = yaml.getInt(
+                        "wilderness.scanner.medium-risk-max-build-score",
+                        defaults.wilderness.scanner.mediumRiskMaxBuildScore
+                    ).coerceAtLeast(1),
+                    highRiskMinBuildScore = yaml.getInt(
+                        "wilderness.scanner.high-risk-min-build-score",
+                        defaults.wilderness.scanner.highRiskMinBuildScore
+                    ).coerceAtLeast(1),
+                    damageThreshold = yaml.getInt(
+                        "wilderness.scanner.damage-threshold",
+                        defaults.wilderness.scanner.damageThreshold
+                    ).coerceAtLeast(0)
+                ),
+                performance = WildernessPerformanceConfig(
+                    maxBlocksApplyPerRegionTick = yaml.getInt(
+                        "wilderness.performance.max-blocks-apply-per-region-tick",
+                        defaults.wilderness.performance.maxBlocksApplyPerRegionTick
+                    ).coerceIn(128, 65536),
+                    maxJobsRunning = yaml.getInt(
+                        "wilderness.performance.max-jobs-running",
+                        defaults.wilderness.performance.maxJobsRunning
+                    ).coerceIn(1, 16),
+                    maxRegionJobsRunning = yaml.getInt(
+                        "wilderness.performance.max-region-jobs-running",
+                        defaults.wilderness.performance.maxRegionJobsRunning
+                    ).coerceIn(1, 64),
+                    requireTpsAbove = yaml.getDouble(
+                        "wilderness.performance.require-tps-above",
+                        defaults.wilderness.performance.requireTpsAbove
+                    ).coerceIn(0.0, 20.0),
+                    requireMsptBelow = yaml.getDouble(
+                        "wilderness.performance.require-mspt-below",
+                        defaults.wilderness.performance.requireMsptBelow
+                    ).coerceIn(1.0, 1000.0),
+                    pauseWhenPlayerNearby = yaml.getBoolean(
+                        "wilderness.performance.pause-when-player-nearby",
+                        defaults.wilderness.performance.pauseWhenPlayerNearby
+                    ),
+                    playerSafeDistance = yaml.getInt(
+                        "wilderness.performance.player-safe-distance",
+                        defaults.wilderness.performance.playerSafeDistance
+                    ).coerceIn(0, 512)
+                ),
+                backup = WildernessBackupConfig(
+                    compression = yaml.getString("wilderness.backup.compression", defaults.wilderness.backup.compression)!!
+                        .lowercase(Locale.ROOT),
+                    atomicWrite = yaml.getBoolean("wilderness.backup.atomic-write", defaults.wilderness.backup.atomicWrite),
+                    keepDays = yaml.getInt("wilderness.backup.keep-days", defaults.wilderness.backup.keepDays).coerceAtLeast(1),
+                    verifyHash = yaml.getBoolean("wilderness.backup.verify-hash", defaults.wilderness.backup.verifyHash)
+                ),
+                preview = WildernessPreviewConfig(
+                    particleEnabled = yaml.getBoolean(
+                        "wilderness.preview.particle-enabled",
+                        defaults.wilderness.preview.particleEnabled
+                    ),
+                    particleDurationSeconds = yaml.getInt(
+                        "wilderness.preview.particle-duration-seconds",
+                        defaults.wilderness.preview.particleDurationSeconds
+                    ).coerceIn(1, 300),
+                    useClientBlockPreview = yaml.getBoolean(
+                        "wilderness.preview.use-client-block-preview",
+                        defaults.wilderness.preview.useClientBlockPreview
+                    )
+                )
             )
         )
     }

@@ -7,6 +7,7 @@ import com.lifelink.treelifecycle.recovery.RecoveryService
 import com.lifelink.treelifecycle.scheduler.SchedulerAdapter
 import com.lifelink.treelifecycle.service.AdminSaplingModeService
 import com.lifelink.treelifecycle.util.Permissions
+import com.lifelink.treelifecycle.wilderness.WildernessCommand
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
@@ -22,6 +23,7 @@ class LifeLinkCommand(
     private val messageService: MessageService,
     private val scheduler: SchedulerAdapter,
     private val adminSaplingModeService: AdminSaplingModeService,
+    private val wildernessCommand: WildernessCommand,
     private val recoveryServiceProvider: () -> RecoveryService?,
     private val logger: Logger
 ) : CommandExecutor, TabCompleter {
@@ -30,6 +32,10 @@ class LifeLinkCommand(
             "reload" -> reload(sender)
             "recover" -> recover(sender)
             "saplingmode" -> saplingMode(sender, args.getOrNull(1))
+            "wilderness", "wild", "restore" -> wildernessCommand.handle(sender, args.drop(1))
+            "status", "stats" -> status(sender)
+            "inspect" -> inspect(sender)
+            "debug" -> debug(sender, args.getOrNull(1))
             else -> messageService.send(sender, "command-usage")
         }
         return true
@@ -49,10 +55,16 @@ class LifeLinkCommand(
                 listOf("on", "off", "status")
                     .filter { it.startsWith(args[1], ignoreCase = true) }
                     .toMutableList()
+            } else if (args[0].equals("wilderness", ignoreCase = true) || args[0].equals("wild", ignoreCase = true)) {
+                wildernessCommand.tab(sender, args.drop(1)).toMutableList()
             } else {
                 mutableListOf()
             }
-            else -> mutableListOf()
+            else -> if (args[0].equals("wilderness", ignoreCase = true) || args[0].equals("wild", ignoreCase = true)) {
+                wildernessCommand.tab(sender, args.drop(1)).toMutableList()
+            } else {
+                mutableListOf()
+            }
         }
     }
 
@@ -121,11 +133,40 @@ class LifeLinkCommand(
 
     private fun availableSubcommands(sender: CommandSender): List<String> =
         buildList {
+            add("help")
             if (sender.hasPermission(Permissions.RELOAD) || sender.hasPermission(Permissions.ADMIN)) add("reload")
             if (sender.hasPermission(Permissions.RECOVER) || sender.hasPermission(Permissions.ADMIN)) add("recover")
             if (canUseSaplingMode(sender)) add("saplingmode")
+            if (sender.hasPermission(Permissions.WILDERNESS_SCAN) || sender.hasPermission(Permissions.ADMIN)) add("wilderness")
+            if (sender.hasPermission(Permissions.STATS) || sender.hasPermission(Permissions.ADMIN)) add("status")
+            if (sender.hasPermission(Permissions.STATS) || sender.hasPermission(Permissions.ADMIN)) add("stats")
+            if (sender.hasPermission(Permissions.INSPECT) || sender.hasPermission(Permissions.ADMIN)) add("inspect")
         }
 
     private fun canUseSaplingMode(sender: CommandSender): Boolean =
         sender.hasPermission(Permissions.ADMIN_SAPLING_MODE) || sender.hasPermission(Permissions.ADMIN)
+
+    private fun status(sender: CommandSender) {
+        if (!sender.hasPermission(Permissions.STATS) && !sender.hasPermission(Permissions.ADMIN)) {
+            messageService.send(sender, "no-permission")
+            return
+        }
+        messageService.send(sender, "status-summary")
+    }
+
+    private fun inspect(sender: CommandSender) {
+        if (!sender.hasPermission(Permissions.INSPECT) && !sender.hasPermission(Permissions.ADMIN)) {
+            messageService.send(sender, "no-permission")
+            return
+        }
+        messageService.send(sender, "inspect-usage")
+    }
+
+    private fun debug(sender: CommandSender, target: String?) {
+        if (!sender.hasPermission(Permissions.WILDERNESS_DEBUG) && !sender.hasPermission(Permissions.ADMIN)) {
+            messageService.send(sender, "no-permission")
+            return
+        }
+        messageService.send(sender, "debug-summary", mapOf("target" to (target ?: "scheduler"), "folia" to scheduler.folia.toString()))
+    }
 }

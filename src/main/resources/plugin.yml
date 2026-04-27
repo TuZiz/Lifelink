@@ -10,7 +10,7 @@ description: Tree lifecycle replanting and managed sapling protection for Spigot
 commands:
   lifelink:
     description: LifeLink administration command
-    usage: /lifelink <reload|recover|saplingmode>
+    usage: /lifelink <reload|recover|saplingmode|wilderness>
 
 permissions:
   lifelink.admin:
@@ -19,9 +19,29 @@ permissions:
     default: op
   lifelink.recover:
     default: op
+  lifelink.stats:
+    default: op
+  lifelink.inspect:
+    default: op
   lifelink.admin.sapling-mode:
     default: op
   lifelink.bypass.sapling-protection:
     default: op
   lifelink.bypass.managed-tree:
+    default: op
+  lifelink.wilderness.scan:
+    default: op
+  lifelink.wilderness.preview:
+    default: op
+  lifelink.wilderness.restore:
+    default: op
+  lifelink.wilderness.restore.force:
+    default: op
+  lifelink.wilderness.confirm:
+    default: op
+  lifelink.wilderness.rollback:
+    default: op
+  lifelink.wilderness.protect:
+    default: op
+  lifelink.wilderness.debug:
     default: op
