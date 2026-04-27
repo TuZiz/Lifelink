@@ -1,0 +1,27 @@
+name: LifeLink
+version: '${version}'
+main: com.lifelink.treelifecycle.bootstrap.LifeLinkPlugin
+api-version: '1.20'
+load: POSTWORLD
+folia-supported: true
+authors: [ ymxc ]
+description: Tree lifecycle replanting and managed sapling protection for Spigot, Paper and Folia.
+
+commands:
+  lifelink:
+    description: LifeLink administration command
+    usage: /lifelink <reload|recover|saplingmode>
+
+permissions:
+  lifelink.admin:
+    default: op
+  lifelink.reload:
+    default: op
+  lifelink.recover:
+    default: op
+  lifelink.admin.sapling-mode:
+    default: op
+  lifelink.bypass.sapling-protection:
+    default: op
+  lifelink.bypass.managed-tree:
+    default: op

@@ -1,0 +1,53 @@
+messages:
+  # Plugin message prefix, MiniMessage format.
+  prefix: "<#48CAE4>✦ LifeLink</#48CAE4> <#A9AEB8>»</#A9AEB8> "
+  plugin-loading:
+    type: actionbar
+    text: "<prefix><#FFB86C>The plugin is still loading async state, please retry in a moment.</#FFB86C>"
+  no-permission:
+    type: chat
+    text: "<prefix><#FF5555>You do not have permission to do that.</#FF5555>"
+  protected-sapling:
+    type: actionbar
+    text: "<prefix><#FF5555>System replanted plants are protected and cannot be broken or replaced.</#FF5555>"
+  reload-started:
+    type: chat
+    text: "<prefix><#8BE9FD>Reloading configuration and language files asynchronously.</#8BE9FD>"
+  reload-success:
+    type: chat
+    text: "<prefix><#50FA7B>Reload completed.</#50FA7B>"
+  reload-failed:
+    type: chat
+    text: "<prefix><#FF5555>Reload failed: <reason></#FF5555>"
+  recovery-queued:
+    type: chat
+    text: "<prefix><#8BE9FD>Queued <reason> recovery checks.</#8BE9FD>"
+  player-only-command:
+    type: chat
+    text: "<prefix><#FF5555>This command can only be used by an online player.</#FF5555>"
+  sapling-mode-enabled:
+    type: chat
+    text: "<prefix><#50FA7B>Admin sapling mode enabled. Saplings you place will be managed for automatic replanting.</#50FA7B>"
+  sapling-mode-disabled:
+    type: chat
+    text: "<prefix><#A9AEB8>Admin sapling mode disabled.</#A9AEB8>"
+  sapling-mode-recorded:
+    type: actionbar
+    text: "<prefix><#50FA7B>Marked this <tree_type> sapling for automatic replanting.</#50FA7B>"
+  sapling-mode-usage:
+    type: chat
+    text: "<prefix><#8BE9FD>Usage: /lifelink saplingmode <#50FA7B>on</#50FA7B>|<#FF5555>off</#FF5555>|<#F1FA8C>status</#F1FA8C></#8BE9FD>"
+  command-usage:
+    type: chat
+    text: "<prefix><#8BE9FD>Usage: /lifelink <#50FA7B>reload</#50FA7B>, <#50FA7B>recover</#50FA7B>, or <#50FA7B>saplingmode</#50FA7B></#8BE9FD>"
+
+tree-types:
+  oak: "Oak"
+  birch: "Birch"
+  spruce: "Spruce"
+  jungle: "Jungle"
+  acacia: "Acacia"
+  dark_oak: "Dark Oak"
+  mangrove: "Mangrove"
+  cherry: "Cherry"
+  pale_oak: "Pale Oak"

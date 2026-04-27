@@ -1,0 +1,82 @@
+messages:
+  # 插件消息前缀：独立配置，正文通过 <prefix> 引用。
+  prefix: "<#48CAE4>✦ 生生不息</#48CAE4> <#A9AEB8>»</#A9AEB8> "
+
+  plugin-loading:
+    type: actionbar
+    text: "<prefix><#F8F3D4>插件正处于异步加载状态，请稍候...</#F8F3D4>"
+
+  no-permission:
+    type: chat
+    text: "<prefix><#FF6B6B>✖ 你没有执行此操作的权限。</#FF6B6B>"
+
+  protected-sapling:
+    type: actionbar
+    text: "<prefix><#FF6B6B>✖ 系统补种的植物受保护，无法直接破坏或替换。</#FF6B6B>"
+
+  harvest-busy:
+    type: actionbar
+    text: "<prefix><#FCA311>⚠ 该位置正在处理生命周期任务，请勿重复触发。</#FCA311>"
+
+  harvest-replant-success:
+    type: actionbar
+    text: "<prefix><#4DDB86>✔ <tree_type> 已在原位置完成自动补种。</#4DDB86>"
+
+  replant-retry-scheduled:
+    type: chat
+    text: "<prefix><#FFC048>↻ 暂时无法补种，系统将自动重试 ┃ 原因: <reason></#FFC048>"
+
+  replant-failed:
+    type: chat
+    text: "<prefix><#FF6B6B>✖ 自动补种失败 ┃ 原因: <reason></#FF6B6B>"
+
+  reload-started:
+    type: chat
+    text: "<prefix><#48CAE4>↻ 开始异步重载配置与语言文件...</#48CAE4>"
+
+  reload-success:
+    type: chat
+    text: "<prefix><#4DDB86>✔ 异步重载完成。</#4DDB86>"
+
+  reload-failed:
+    type: chat
+    text: "<prefix><#FF6B6B>✖ 重载失败 ┃ <reason></#FF6B6B>"
+
+  recovery-queued:
+    type: chat
+    text: "<prefix><#48CAE4>已成功提交 <reason> 个恢复检查任务。</#48CAE4>"
+
+  player-only-command:
+    type: chat
+    text: "<prefix><#FF6B6B>✖ 这个指令只能由在线玩家执行。</#FF6B6B>"
+
+  sapling-mode-enabled:
+    type: chat
+    text: "<prefix><#4DDB86>✔ 已开启管理员补种树苗模式。接下来你放置的树苗会作为系统托管树苗。</#4DDB86>"
+
+  sapling-mode-disabled:
+    type: chat
+    text: "<prefix><#A9AEB8>已关闭管理员补种树苗模式。</#A9AEB8>"
+
+  sapling-mode-recorded:
+    type: actionbar
+    text: "<prefix><#4DDB86>已将 <tree_type> 树苗标记为可自动补种。</#4DDB86>"
+
+  sapling-mode-usage:
+    type: chat
+    text: "<prefix><#48CAE4>用法: /lifelink saplingmode <#4DDB86>on</#4DDB86>|<#FF6B6B>off</#FF6B6B>|<#F8F3D4>status</#F8F3D4></#48CAE4>"
+
+  command-usage:
+    type: chat
+    text: "<prefix><#48CAE4>用法: /lifelink <#4DDB86>reload</#4DDB86>、<#4DDB86>recover</#4DDB86> 或 <#4DDB86>saplingmode</#4DDB86></#48CAE4>"
+
+tree-types:
+  oak: "橡木"
+  birch: "白桦木"
+  spruce: "云杉木"
+  jungle: "丛林木"
+  acacia: "金合欢木"
+  dark_oak: "深色橡木"
+  mangrove: "红树木"
+  cherry: "樱花木"
+  pale_oak: "苍白橡木"

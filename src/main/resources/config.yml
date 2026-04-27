@@ -1,0 +1,108 @@
+# 语言配置：决定默认读取哪个 lang 语言文件。
+language:
+  # 默认语言文件名，不需要写 .yml 后缀。
+  default: zh_cn
+
+# 日志配置：用于控制调试输出。
+logging:
+  # 是否开启调试日志，生产服建议保持 false。
+  debug: false
+
+# 砍伐配置：决定哪些工具可以触发树木生命周期补种。
+harvest:
+  # 是否允许空手砍树也触发自动补种，空手在 Bukkit 中对应 AIR。
+  allow-empty-hand: true
+  # 是否允许玩家潜行砍树时跳过自动补种；用于处理插件安装前已有的人工树或特殊装饰树。
+  sneak-bypass-replant: true
+  # 允许触发自动补种的工具材质名。
+  allowed-tools:
+    - WOODEN_AXE
+    - STONE_AXE
+    - IRON_AXE
+    - GOLDEN_AXE
+    - DIAMOND_AXE
+    - NETHERITE_AXE
+
+# 保护配置：只保护系统补种树苗和可选的托管树砍伐方式。
+protection:
+  # 是否保护 SYSTEM_PLANTED_SAPLING，普通玩家不能破坏、替换或顶掉系统树苗。
+  protect-system-saplings: true
+  # 是否限制 SYSTEM_MANAGED_TREE 只能从树根使用斧头合法砍伐。
+  protect-managed-trees: true
+  # 管理员 bypass 权限是否必须潜行才生效；开启后 OP 普通挖掘也会看到保护效果。
+  bypass-requires-sneaking: true
+  # 是否阻止玩家和实体把耕地踩回泥土。
+  prevent-farmland-trample: true
+
+# 补种配置：控制失败处理、重试和恢复行为。
+replant:
+  # 补种失败策略，可选 CANCEL、RETRY、DROP_SAPLING、RECORD_AND_RECOVER。
+  failure-strategy: RETRY
+  # 自动重试补种的延迟 tick 数，20 tick 约等于 1 秒。
+  retry-delay-ticks: 40
+  # 单个补种任务最大重试次数，超过后进入失败终态。
+  max-retry-attempts: 6
+  # 树苗上方要求的最小净空高度；0 表示允许砍树根后立即补种，即使上方仍有原木。
+  required-clear-height: 0
+  # 从树顶或树中段开始砍时，如果树根还在，每隔多少 tick 检查一次是否可以补种。
+  root-wait-retry-delay-ticks: 10
+  # 等待树根被砍掉的最长秒数，超过后任务进入失败终态，避免玩家砍一半离开造成永久任务。
+  root-wait-timeout-seconds: 1800
+  # 插件启动时是否恢复未完成任务和校验已托管生命周期记录。
+  recovery-on-startup: true
+
+# 效果配置：只控制视觉反馈，不影响生命周期状态。
+effects:
+  # 系统补种树苗成功后播放的粒子效果。
+  plant-particles:
+    # 是否启用系统补种树苗后的粒子效果。
+    enabled: true
+    # 粒子类型，使用 Bukkit Particle 枚举名，例如 HAPPY_VILLAGER、COMPOSTER、END_ROD。
+    particle: HAPPY_VILLAGER
+    # 每个树苗位置播放的粒子数量。
+    count: 12
+    # 粒子的随机扩散范围。
+    offset: 0.35
+    # 粒子的速度/额外参数，通常保持很小即可。
+    extra: 0.02
+
+# 植物配置：用于非树木类的轻量留苗。
+plants:
+  # 甘蔗留苗配置。
+  sugar-cane:
+    # 是否在玩家砍甘蔗最底部时保留最底下一格，只掉落上方甘蔗。
+    leave-base: true
+    # 是否沿用 harvest.sneak-bypass-replant，玩家潜行时允许整株清掉。
+    respect-sneak-bypass: true
+
+# 树木识别配置：限制扫描范围并降低误判玩家建筑的概率。
+detection:
+  # 单棵树最多允许扫描的原木节点数，超过会放弃识别。
+  max-log-nodes: 96
+  # 单次识别最多扫描的树叶候选方块数，避免大范围卡服。
+  max-leaf-scan-blocks: 512
+  # 树干相对触发点允许的最大水平距离。
+  max-horizontal-distance: 6
+  # 树干相对触发点允许的最大高度差。
+  max-tree-height: 24
+  # 树冠扫描时围绕上半部分树干扩展的范围。
+  canopy-padding: 3
+  # 树叶数量与原木数量的最小比例，越高越不容易误判木柱。
+  min-leaf-to-log-ratio: 0.85
+  # 识别为树所需的最少原木节点数。
+  min-log-nodes: 3
+  # 识别为树所需的最少树叶节点数。
+  min-leaf-nodes: 5
+  # 识别为树所需的最少树叶高度层数，用于降低“原木+一层树叶装饰”的误判。
+  min-leaf-layers: 2
+  # 树干核心占全部原木的最小比例，越高越不容易把木屋/横向梁结构误判为树。
+  min-trunk-core-ratio: 0.45
+
+# 持久化配置：所有文件 IO 都会在异步线程执行。
+persistence:
+  # 生命周期和补种任务状态文件路径，相对于插件数据目录。
+  file-name: "data/state.properties"
+  # 批量落盘延迟毫秒数；多人同时砍树时会合并多次状态变更，0 表示每次变更立即异步写盘。
+  flush-delay-millis: 250
+  # 终态任务保留秒数，超过后恢复流程会清理旧记录。
+  terminal-task-retention-seconds: 86400
